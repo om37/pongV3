@@ -25,6 +25,7 @@ public class NetObjectWriter extends ObjectOutputStream
     {
       writeObject( data );                    // Write object
       flush();                                // Flush
+      DEBUG.trace("Returning from put");
       return true;                            // Ok
     }
     catch ( IOException err )

@@ -3,6 +3,7 @@ package server;
 import static common.Global.BAT_MOVE;
 
 import java.net.Socket;
+import java.util.ArrayList;
 
 import common.DEBUG;
 import common.GameObject;
@@ -19,6 +20,8 @@ class S_PongPlayer extends Thread
 	private NetObjectWriter pWriter;//Player's writer
 	private NetObjectReader pReader;//Player's reader
 	private int 			pNumber;//Player's number
+	private int				gameNumber;//The number of the player's game
+	private Server			server;
 	
   /**
    * Constructor
@@ -26,11 +29,13 @@ class S_PongPlayer extends Thread
    * @param model Model of the game
    * @param s Socket used to communicate the players bat move
    */
-  public S_PongPlayer( int player, S_PongModel model, Socket s  )
+  public S_PongPlayer( int player, S_PongModel model, Socket s , int gameNum, Server server )
   {  
 	  //Setup player and give them the model
 	  pNumber = player;
 	  pModel = model;
+	  gameNumber=gameNum;
+	  this.server = server;
 	  
 	  DEBUG.trace("PlayerS Constructor start");
 	  try
@@ -70,6 +75,11 @@ class S_PongPlayer extends Thread
 	  while(true)
 	  {
 		  String move = (String)pReader.get();//Gets the data from the reader
+		  
+		  if(true)//DUMMY CODE - figure out how to determine if sender has closed
+		  {
+			//  server.removeFromGameList(gameNumber);
+		  }
 
 		  //If data was read, determine if player wants to move up or down		  
 		  if(move != null && !move.equals(""))

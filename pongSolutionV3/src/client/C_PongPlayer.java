@@ -47,6 +47,18 @@ class C_PongPlayer extends Thread
   public void run()                             // Execution
   {
 	  DEBUG.trace("Started player thread....");
+	  int gameNum;
+	  while(true)
+	  {
+		  String stringNum = (String)reader.get();
+		  try
+		  {
+			  gameNum = Integer.parseInt(stringNum);
+			  break;
+		  }
+		  catch(NumberFormatException e)
+		  {}
+	  }
 	  
     // Listen to network to get the latest state of the
     //  game from the server
@@ -55,12 +67,12 @@ class C_PongPlayer extends Thread
 	  {
 		  while(true)
 		  {		
-			updateViewWithNewValues("");
+			updateViewWithNewValues((String) reader.get());
 		  }
 	  }
 	  else
 	  {
-		  int gameNum = numOfGames;
+		  System.out.println(gameNum);
 		  while(true)
 		  {		
 			String data="";
@@ -75,33 +87,27 @@ class C_PongPlayer extends Thread
 			}
 			
 			String[] newCoords = data.split(",");
-			if(newCoords[1].equals("Game "+gameNum))//Is it the game we're watching?
+			if(newCoords.length>1)
 			{
-				updateViewWithNewValues(data);
+				if(newCoords[1].equals("Game "+gameNum))//Is it the game we're watching?
+				{
+					updateViewWithNewValues(data);
+					//Thread.sleep(20);
+				}
 			}
 		  }		  
 	  }
   }
 
-	private void updateViewWithNewValues(String mcInData)
+	private void updateViewWithNewValues(String inData)
 	{
-		String data = "";
-		
-		if(!multi)
-		{
-			data = (String) reader.get();
-			DEBUG.trace( "Client PLayer read %s", data);
-		}
-		else
-		{
-			data = mcInData;
-		}
+		String data=inData;
 		
 		String[] newCoords = data.split(",");
 		
 		//Decode string...
 		//0: numOfGames - for multicast/observers - can ignore
-        String gameNumber = newCoords[1];					//1: gameNo 
+        //String gameNumber = newCoords[1];					//1: gameNo 
 		double newBallX=Double.parseDouble(newCoords[2]);	//2: ballX
 		double newBallY=Double.parseDouble(newCoords[3]);	//3: ballY
 		
@@ -156,6 +162,7 @@ class C_PongPlayer extends Thread
 	  long date = new Date().getTime();
 	  writer.put(details+","+date);
 	  model.setChanged(true);
+	  //DEBUG.trace("set changed");
   }
   	
 }

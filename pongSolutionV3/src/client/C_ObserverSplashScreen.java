@@ -59,20 +59,19 @@ public class C_ObserverSplashScreen extends JFrame {
 		try 
 		{
 			in = new NetMCReader(P_SERVER_WRITE, Global.MCA);//Get reader
-			games = in.get().split(",")[0];//
+			while(games == null ? games==null : games.isEmpty())
+				{
+					games = in.get().split(",")[0];//
+					System.out.println(in.get());
+				}
 		} 
 		catch (IOException e) 
 		{
 			e.printStackTrace();
 		}
 		
-		int amount = Integer.parseInt(games);
-		String[] gamesForList = new String[amount];
-		for(int i = 0; i < amount;i++)
-		{
-			gamesForList[i] = String.valueOf(i);
-		}
-		cmbGameList = new JComboBox<String>(gamesForList);
+		String[] gameList = games.split("-");		
+		cmbGameList = new JComboBox<String>(gameList);
 		return cmbGameList;
 	}
 

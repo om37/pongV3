@@ -69,30 +69,17 @@ class C_PongObserver extends Thread
 		String[] newCoords = data.split(",");
 		
 		if(newCoords[1].equals("Game "+gameToWatch))//Is it the game we're watching?
-		{
-			
+		{			
 			//Decode string...
-			/*
-			index:	dataItem
-			0:		numOfGames - for multicast/observers
-			1:		gameNo.
-			2:		ballX
-			3:		ballY
-			4:		bat0X
-			5:		bat0Y
-			6:		bat1X
-			7:		bat1Y
-			8:		time
-			*/
+			//0: numOfGames - for multicast/observers - can ignore
+			double newBallX=Double.parseDouble(newCoords[2]);	//2: ballX
+			double newBallY=Double.parseDouble(newCoords[3]);	//3: ballY
 			
-			double newBallX=Double.parseDouble(newCoords[2]);
-			double newBallY=Double.parseDouble(newCoords[3]);
+			double batOneX=Double.parseDouble(newCoords[4]);	//4: bat0X
+			double batOneY=Double.parseDouble(newCoords[5]);	//5: bat0Y
 			
-			double batOneX=Double.parseDouble(newCoords[4]);
-			double batOneY=Double.parseDouble(newCoords[5]);
-			
-			double batTwoX=Double.parseDouble(newCoords[6]);
-			double batTwoY=Double.parseDouble(newCoords[7]);
+			double batTwoX=Double.parseDouble(newCoords[6]);	//6: bat1X
+			double batTwoY=Double.parseDouble(newCoords[7]);	//7: bat1Y
 			
 			
 			//Create dummy ball object with new coords 

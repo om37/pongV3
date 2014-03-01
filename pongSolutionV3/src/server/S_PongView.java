@@ -17,15 +17,21 @@ class S_PongView implements Observer
   private NetObjectWriter left, right;
   private NetMCWriter mutlicastOut;
   private int gameNo;
+  private Server server;
  
 
-  public S_PongView( NetObjectWriter c1, NetObjectWriter c2, int gameNum )
+  public S_PongView( NetObjectWriter c1, NetObjectWriter c2, int gameNum, Server server )
   {
+	this.server = server;
 	gameNo = gameNum;
     left = c1; right = c2;
     try 
     {
 		mutlicastOut = new NetMCWriter(Global.P_SERVER_WRITE, Global.MCA);
+		String num = String.valueOf(gameNo);
+		mutlicastOut.put(num);
+		left.put(num);
+		right.put(num);
 	}
     catch (IOException e) 
     {
@@ -47,8 +53,9 @@ class S_PongView implements Observer
     // Now need to send position of game objects to the client
     //  as the model on the server has changed
    
+    String games = server.getGameListAsString();
     String multiCastSend =
-    		Global.numOfGames+","+ "Game "+gameNo + ","+
+    		games+","+ "Game "+gameNo + ","+
     		ball.getX()+","+ball.getY()+","+
     		bats[0].getX()+","+bats[0].getY()+","+
     		bats[1].getX()+","+bats[1].getY() +',';

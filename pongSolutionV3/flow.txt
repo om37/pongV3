@@ -1,0 +1,28 @@
+On client start:
+	Create view, model and controller
+	Contact server:
+		Create socket (need to know server IP and Port to connect to)
+		Create Player object, pass Socket to server:
+			Using socket, create reader/writer to server
+		Add player to model (as observer)
+		Start player thread:
+			Check if reader null
+			If not read from reader (reader.get())
+			Decode string for UI element (bats, ball) positions
+			Create dummy objects and give them new coords
+			Send dummy objects to model
+			Call modelChanged to update observers
+
+ClientView will wait for keypress. On keypress:
+	View send keyCode to controller
+	Controller decide which key is pressed
+	Call relevant method on model (moveBatUp/Down)
+	Model call moveBat on player object
+	player.moveBat adds the direction of movement to player's writer (which has socket to server)
+
+
+On server start:
+	Create model
+	Create server socket
+	Make contact with clients:
+		

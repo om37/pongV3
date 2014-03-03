@@ -55,7 +55,15 @@ class C_PongClient
 		  DEBUG.trace("Contacting server....");
 		  
 		  Socket conn = new Socket(serverAddress, Global.PORT);
-		  C_PongPlayer me = new C_PongPlayer(model, conn, multicast);
+		  C_PongPlayer me;
+		  if(!multicast)
+		  {
+			  me = new C_PongPlayer(model, conn, multicast);
+		  }
+		  else
+		  {
+			  me = new C_PongMulticastPlayer(model, conn);
+		  }
 		  model.addPlayer(me);
 		  
 		  DEBUG.trace("Starting client player thread...");

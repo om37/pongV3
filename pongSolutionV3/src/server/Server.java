@@ -30,7 +30,7 @@ public class Server
   {
     DEBUG.set( true );
     DEBUG.trace("Pong Server");
-    DEBUG.set( false );               // Otherwise lots of debug info
+    //DEBUG.set( false );               // Otherwise lots of debug info
     
     gameList = new ArrayList<Integer>();   
     Runnable r = setupRunnable();

@@ -112,7 +112,10 @@ class S_PongPlayer extends Thread
 						pModel.setP1Time(sendTime);
 				}
 				else if(splitMove[0].equals("CLOSED"))
+				{
 					server.removeFromGameList(gameNumber);
+					return;
+				}
 			}
 		}
 	}

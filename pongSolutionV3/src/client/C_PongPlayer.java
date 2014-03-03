@@ -18,6 +18,9 @@ class C_PongPlayer extends Thread
 	private boolean			multi;
 	private String 			moveDir;
 	private C_PongModel model;
+	
+	public C_PongPlayer()
+	{}
   /**
    * Constructor
    * @param model - model of the game

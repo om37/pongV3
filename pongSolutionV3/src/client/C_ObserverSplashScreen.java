@@ -58,7 +58,7 @@ public class C_ObserverSplashScreen extends JFrame {
 	{
 		try 
 		{
-			in = new NetMCReader(P_SERVER_WRITE, Global.MCA);//Get reader
+			in = new NetMCReader(Global.P_GAME_LIST, Global.LIST_MCA);//Get reader
 			while(games == null ? games==null : games.isEmpty())
 				{
 					games = in.get().split(",")[0];//

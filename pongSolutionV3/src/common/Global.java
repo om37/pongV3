@@ -31,10 +31,11 @@ public class Global
   //Ports
  public static final int P_SERVER_WRITE  = 55000;  // Sever Writes on
  public static final int P_SERVER_READ  = 55001;  // Server Reads on
+ public static final int P_GAME_LIST    = 55002;  //Server sends game list on
  
  // MultiCast Address
  public static final String MCA = "224.0.0.7";
-  
+ public static final String LIST_MCA = "224.0.0.8";
   
 }
 

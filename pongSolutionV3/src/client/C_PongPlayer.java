@@ -16,7 +16,7 @@ class C_PongPlayer extends Thread
 	private NetObjectWriter writer;
 	private NetMCReader		mcReader;
 	private boolean			multi;
-	
+	private String 			moveDir;
 	private C_PongModel model;
   /**
    * Constructor
@@ -83,6 +83,7 @@ class C_PongPlayer extends Thread
 			}
 			catch (IOException e)
 			{
+				DEBUG.error("MC In.gett error: %s", e.getMessage());
 				e.printStackTrace();
 			}
 			

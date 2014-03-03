@@ -16,7 +16,7 @@ public class Server
 {
   private NetObjectWriter p0, p1;
   ServerSocket ss;
-  private  ArrayList<Integer> gameList = new ArrayList<Integer>();
+  private  ArrayList<Integer> gameList;
   
   public static void main( String args[] )
   {
@@ -32,6 +32,11 @@ public class Server
     DEBUG.trace("Pong Server");
     DEBUG.set( false );               // Otherwise lots of debug info
     
+    gameList = new ArrayList<Integer>();   
+    Runnable r = setupRunnable();
+   
+    Thread sendGameLists = new Thread(r);
+    sendGameLists.start();
     
     try
     {
@@ -61,6 +66,36 @@ public class Server
     }
   }
   
+  /**
+   * Sets up the runnable which is used to send the list of available games to new starting observers
+   * @return Runnable - the runnable to use
+   */
+  private Runnable setupRunnable()
+  {
+	 return new Runnable()
+	 {			
+		@Override
+		public void run()
+		{
+			try
+			{
+				NetMCWriter writer = new NetMCWriter(Global.P_GAME_LIST, Global.LIST_MCA);
+				while(true)
+					writer.put(getGameListAsString());
+			}
+			catch (IOException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	};
+  }
+  
+  /**
+   * Removes a game from the server's game list.
+   * @param gameNum the game to be removed
+   */
   public void removeFromGameList(int gameNum)
   {
 	  gameList.remove((Object)gameNum);
@@ -73,13 +108,19 @@ public class Server
   public String getGameListAsString()
   {
 	  String games = "";
-	  System.out.println(gameList.size());
-	  for(int i=0;i<gameList.size();i++)
+	  if(gameList.size() > 0)
 	  {
-		  games += gameList.get(i)+"-";
+		  for(int i=0;i<gameList.size();i++)
+		  {
+			  games += gameList.get(i)+"-";
+		  }
+		  return games;
 	  }
-	  System.out.println(games);
-	  return games;
+	  else
+	  {
+		  return games;
+	  }
+		  
   }
   
   /**

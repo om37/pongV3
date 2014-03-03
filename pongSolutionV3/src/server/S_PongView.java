@@ -24,19 +24,20 @@ class S_PongView implements Observer
   {
 	this.server = server;
 	gameNo = gameNum;
+	String num = String.valueOf(gameNo);
     left = c1; right = c2;
     try 
     {
-		mutlicastOut = new NetMCWriter(Global.P_SERVER_WRITE, Global.MCA);
-		String num = String.valueOf(gameNo);
+		mutlicastOut = new NetMCWriter(Global.P_SERVER_WRITE, Global.MCA);		
 		mutlicastOut.put(num);
-		left.put(num);
-		right.put(num);
 	}
     catch (IOException e) 
     {
+    	DEBUG.error("MC Out.put error: %s", e.getMessage());
 		e.printStackTrace();
 	}
+    left.put(num);
+	right.put(num);
   }
 
   /**

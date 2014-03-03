@@ -54,9 +54,8 @@ class S_PongView implements Observer
     // Now need to send position of game objects to the client
     //  as the model on the server has changed
    
-    String games = server.getGameListAsString();
     String multiCastSend =
-    		games+","+ "Game "+gameNo + ","+
+    		"Game "+gameNo + ","+
     		ball.getX()+","+ball.getY()+","+
     		bats[0].getX()+","+bats[0].getY()+","+
     		bats[1].getX()+","+bats[1].getY() +',';

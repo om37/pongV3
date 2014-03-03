@@ -35,10 +35,10 @@ public class C_PongController
     // Char is ASCII value
     switch ( keyCode )              // Character is
     {
-      case -KeyEvent.VK_LEFT:        // Left Arrow
-        break;
-      case -KeyEvent.VK_RIGHT:       // Right arrow
-        break;
+      case 12345:
+    	  model.moveBat("CLOSED");
+    	  System.out.println("Closed");
+    	break;
       case -KeyEvent.VK_UP:          // Up arrow
 	        // Send to server
 	    	//Via player object in model...

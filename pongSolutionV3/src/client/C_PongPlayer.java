@@ -90,7 +90,7 @@ class C_PongPlayer extends Thread
 			String[] newCoords = data.split(",");
 			if(newCoords.length>1)
 			{
-				if(newCoords[1].equals("Game "+gameNum))//Is it the game we're watching?
+				if(newCoords[0].equals("Game "+gameNum))//Is it the game we're watching?
 				{
 					updateViewWithNewValues(data);
 					//Thread.sleep(20);
@@ -107,20 +107,19 @@ class C_PongPlayer extends Thread
 		String[] newCoords = data.split(",");
 		
 		//Decode string...
-		//0: numOfGames - for multicast/observers - can ignore
-        //String gameNumber = newCoords[1];					//1: gameNo 
-		double newBallX=Double.parseDouble(newCoords[2]);	//2: ballX
-		double newBallY=Double.parseDouble(newCoords[3]);	//3: ballY
+        //String gameNumber = newCoords[0];					//0: gameNo 
+		double newBallX=Double.parseDouble(newCoords[1]);	//1: ballX
+		double newBallY=Double.parseDouble(newCoords[2]);	//2: ballY
 		
-		double batOneX=Double.parseDouble(newCoords[4]);	//4: bat0X
-		double batOneY=Double.parseDouble(newCoords[5]);	//5: bat0Y
+		double batOneX=Double.parseDouble(newCoords[3]);	//3: bat0X
+		double batOneY=Double.parseDouble(newCoords[4]);	//4: bat0Y
 		
-		double batTwoX=Double.parseDouble(newCoords[6]);	//6: bat1X
-		double batTwoY=Double.parseDouble(newCoords[7]);	//7: bat1Y
+		double batTwoX=Double.parseDouble(newCoords[5]);	//5: bat1X
+		double batTwoY=Double.parseDouble(newCoords[6]);	//6: bat1Y
 		
 		if(!multi)
 		{
-			long time=Long.parseLong(newCoords[8]);//8:	time/ping
+			long time=Long.parseLong(newCoords[7]);//7:	time/ping
 			
 			//Set time in model
 			model.setRecTime(new Date().getTime());
@@ -160,6 +159,7 @@ class C_PongPlayer extends Thread
   
   public void moveBat(String details)
   {
+	  System.out.println(details);
 	  long date = new Date().getTime();
 	  writer.put(details+","+date);
 	  model.setChanged(true);

@@ -8,9 +8,13 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+
 import javax.swing.JFrame;
 
 import java.util.Observable;
@@ -18,7 +22,6 @@ import java.util.Observer;
 
 import common.DEBUG;
 import common.GameObject;
-
 import static common.Global.*;
 
 /**
@@ -41,7 +44,10 @@ class C_PongView extends JFrame implements Observer
   {
     setSize( W, H );                        // Size of window
     addKeyListener( new Transaction() );    // Called when key press
+    
+    addWindowListener(closeListener);
     setDefaultCloseOperation(EXIT_ON_CLOSE);
+    
     
     playersView = player;//Set the player's view
   }
@@ -185,6 +191,19 @@ class C_PongView extends JFrame implements Observer
   {
     pongController = aPongController;
   }
+  
+  WindowListener closeListener = new WindowAdapter() {
+	 @Override
+	 public void windowClosing(WindowEvent e)
+	 {
+		 pongController.userKeyInteraction(12345);
+		 System.out.println("Close listener");
+		 JFrame f = new JFrame();
+		 f.setBounds(0, 0, 200, 200);
+		 f.setVisible(true);
+		 C_PongView.this.dispose();
+	 }
+  };
 
   /**
    * Methods Called on a key press 

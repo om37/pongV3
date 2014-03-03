@@ -98,6 +98,7 @@ public class Server
    */
   public void removeFromGameList(int gameNum)
   {
+	  System.out.println("Removing " + gameNum);
 	  gameList.remove((Object)gameNum);
   }
   
@@ -114,6 +115,7 @@ public class Server
 		  {
 			  games += gameList.get(i)+"-";
 		  }
+		  System.out.println("Game string: " + games);
 		  return games;
 	  }
 	  else

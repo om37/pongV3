@@ -65,21 +65,21 @@ class C_PongObserver extends Thread
 			e.printStackTrace();
 		}
 		DEBUG.trace( "Client PLayer read %s", data);
-		//System.out.println(data);
+		System.out.println(data);
 		String[] newCoords = data.split(",");
 		
-		if(newCoords[1].equals("Game "+gameToWatch))//Is it the game we're watching?
+		if(newCoords[0].equals("Game "+gameToWatch))//Is it the game we're watching?
 		{			
 			//Decode string...
-			//0: numOfGames - for multicast/observers - can ignore
-			double newBallX=Double.parseDouble(newCoords[2]);	//2: ballX
-			double newBallY=Double.parseDouble(newCoords[3]);	//3: ballY
+	        //String gameNumber = newCoords[0];					//0: gameNo 
+			double newBallX=Double.parseDouble(newCoords[1]);	//1: ballX
+			double newBallY=Double.parseDouble(newCoords[2]);	//2: ballY
 			
-			double batOneX=Double.parseDouble(newCoords[4]);	//4: bat0X
-			double batOneY=Double.parseDouble(newCoords[5]);	//5: bat0Y
+			double batOneX=Double.parseDouble(newCoords[3]);	//3: bat0X
+			double batOneY=Double.parseDouble(newCoords[4]);	//4: bat0Y
 			
-			double batTwoX=Double.parseDouble(newCoords[6]);	//6: bat1X
-			double batTwoY=Double.parseDouble(newCoords[7]);	//7: bat1Y
+			double batTwoX=Double.parseDouble(newCoords[5]);	//5: bat1X
+			double batTwoY=Double.parseDouble(newCoords[6]);	//6: bat1Y
 			
 			
 			//Create dummy ball object with new coords 

@@ -1,0 +1,8 @@
+/Makefile
+/client
+/common
+/glob.sh
+/pong_compile.bat
+/pong_defs.bat
+/pong_run.bat
+/server

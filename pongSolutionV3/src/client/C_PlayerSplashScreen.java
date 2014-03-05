@@ -8,6 +8,14 @@ import javax.swing.*;
 
 import server.Server;
 
+/**
+ * A screen to be shown to the clients after they've chosen to be a player.
+ * Allows input of the IP address and gives choice to receive bat and ball
+ * positions over multicast.
+ * 
+ * @author om37
+ *
+ */
 public class C_PlayerSplashScreen extends JFrame {
 	
 	JTextField txtIpAddress;
@@ -20,6 +28,9 @@ public class C_PlayerSplashScreen extends JFrame {
 	
 	String ipAddress;
 	
+	/**
+	 * Constructor
+	 */
 	public C_PlayerSplashScreen()
 	{		
 		Container cp = getContentPane();
@@ -50,6 +61,12 @@ public class C_PlayerSplashScreen extends JFrame {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
 	
+	/**
+	 * Action listener for ok button. Creates new client with the entered IP address and the choice of multicast
+	 * or TCP/IP communication with the server.
+	 * @author om37
+	 *
+	 */
 	class ButtonClick implements ActionListener
 	{
 		@Override

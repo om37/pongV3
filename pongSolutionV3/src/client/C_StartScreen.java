@@ -35,7 +35,6 @@ public class C_StartScreen extends JFrame {
 	 * */
 	public C_StartScreen()
 	{
-		System.out.println("Start splash screen " + Global.numOfGames);
 		Container cp = getContentPane();
 		cp.setLayout(null);
 		setSize(W,H);

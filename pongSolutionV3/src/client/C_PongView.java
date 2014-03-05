@@ -196,13 +196,11 @@ class C_PongView extends JFrame implements Observer
 	 @Override
 	 public void windowClosing(WindowEvent e)
 	 {
+		 C_PongView.this.setVisible(false);
+		 C_PongView.this.dispose();
 		 pongController.userKeyInteraction(12345);
 		 System.out.println("Close listener");
-		 JFrame f = new JFrame();
-		 f.setBounds(0, 0, 200, 200);
-		 f.setVisible(true);
-		 C_PongView.this.dispose();
-	 }
+		 }
   };
 
   /**

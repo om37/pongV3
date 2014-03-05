@@ -10,54 +10,80 @@ import common.*;
  */
 class S_ActiveModel implements Runnable
 {
-  S_PongModel pongModel;
+	private S_PongModel pongModel;
+	private int count = 0;
+	private Server server;
+	private int gameNum;
+	public boolean isRunning;
 
-  public S_ActiveModel( S_PongModel aPongModel )
-  {
-    pongModel = aPongModel;
-  }
+	public S_ActiveModel( S_PongModel aPongModel, Server server, int gameNum )
+	{
+		pongModel = aPongModel;
+		this.gameNum = gameNum;
+		System.out.println("Active model game num " + gameNum);
+		this.server = server;
+	}
 
-  /**
-   * Code to position the ball after time interval
-   * runs as a separate thread
-   */
-  public void run()
-  {
-    final double S = 1;           // Units to move
-    try
-    {
-      GameObject ball    = pongModel.getBall();
-      GameObject bats[]  = pongModel.getBats();
-      
-      while ( true )
-      {
-    	DEBUG.trace("Active model loop started");
-        double x = ball.getX(); double y = ball.getY();
-        // Deal with possible edge of board hit
-        if ( x >= W-B-BALL_SIZE ) ball.changeDirectionX();
-        if ( x <= 0+B           ) ball.changeDirectionX();
-        if ( y >= H-B-BALL_SIZE ) ball.changeDirectionY();
-        if ( y <= 0+M           ) ball.changeDirectionY();
+	/**
+	 * returns the game number
+	 * @return int - the game number
+	 */
+	public int getGameNum()
+	{
+		System.out.println(gameNum);
+		return gameNum;
+	}
 
-        DEBUG.trace("Ball moving...");
-        ball.moveX( S );  ball.moveY( S );
-        
-        // As only a hit on the bat is detected it is assumed to be
-        // on the front or back of the bat
-        // A hit on the top or bottom has an interesting affect
-        
-        if ( bats[0].collision( ball ) == GameObject.Collision.HIT  ||
-             bats[1].collision( ball ) == GameObject.Collision.HIT )
-        {
-          ball.changeDirectionX();
-        }
+	/**
+	 * Code to position the ball after time interval
+	 * runs as a separate thread
+	 */
+	public void run()
+	{
+		isRunning = true;
+		server.addActiveGameToList(this);
+		
+		final double S = 1;           // Units to move
+		try
+		{
+			GameObject ball    = pongModel.getBall();
+			GameObject bats[]  = pongModel.getBats();
 
-        pongModel.modelChanged();      // Model changed refresh screen
-        
-        Thread.sleep( 20 );            // About 50 Hz
-      }
-    } catch ( Exception e ) {};
-  }
+			while ( true )
+			{
+				if(Thread.currentThread().isInterrupted() || !isRunning)
+					return;
+				
+				DEBUG.trace("Active model loop started");
+				double x = ball.getX(); double y = ball.getY();
+				// Deal with possible edge of board hit
+				if ( x >= W-B-BALL_SIZE ) ball.changeDirectionX();
+				if ( x <= 0+B           ) ball.changeDirectionX();
+				if ( y >= H-B-BALL_SIZE ) ball.changeDirectionY();
+				if ( y <= 0+M           ) ball.changeDirectionY();
+
+				DEBUG.trace("Ball moving...");
+				ball.moveX( S );  ball.moveY( S );
+
+				// As only a hit on the bat is detected it is assumed to be
+				// on the front or back of the bat
+				// A hit on the top or bottom has an interesting affect
+
+				if ( bats[0].collision( ball ) == GameObject.Collision.HIT  ||
+						bats[1].collision( ball ) == GameObject.Collision.HIT )
+				{
+					ball.changeDirectionX();
+				}
+
+//				System.out.println(count);
+//				count++;
+
+				pongModel.modelChanged();      // Model changed refresh screen
+
+				Thread.sleep( 20 );            // About 50 Hz
+			}
+		} catch ( Exception e ) {};
+	}
 
 }
 

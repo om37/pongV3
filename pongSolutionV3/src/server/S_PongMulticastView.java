@@ -9,7 +9,7 @@ import java.util.Observer;
 /**
  * Displays a graphical view of the game of pong
  */
-class S_PongView implements Observer
+class S_PongMulticastView implements Observer
 { 
   private S_PongController pongController;
   private GameObject   ball;
@@ -17,27 +17,23 @@ class S_PongView implements Observer
   private NetObjectWriter left, right;
   private NetMCWriter mutlicastOut;
   private int gameNo;
-  private Server server;
+  //private Server server;
  
 
-  public S_PongView( NetObjectWriter c1, NetObjectWriter c2, int gameNum, Server server )
+  public S_PongMulticastView( int gameNum, Server server )
   {
-	this.server = server;
 	gameNo = gameNum;
 	String num = String.valueOf(gameNo);
-    left = c1; right = c2;
-//    try 
-//    {
-//		mutlicastOut = new NetMCWriter(Global.P_SERVER_WRITE, Global.MCA);		
-//		mutlicastOut.put(num);
-//	}
-//    catch (IOException e) 
-//    {
-//    	DEBUG.error("MC Out.put error: %s", e.getMessage());
-//		e.printStackTrace();
-//	}
-    left.put(num);
-	right.put(num);
+  try 
+  {
+		mutlicastOut = new NetMCWriter(Global.P_SERVER_WRITE, Global.MCA);		
+		mutlicastOut.put(num);
+	}
+  catch (IOException e) 
+  {
+  	DEBUG.error("MC Out.put error: %s", e.getMessage());
+		e.printStackTrace();
+	}
   }
 
   /**
@@ -59,15 +55,15 @@ class S_PongView implements Observer
     		ball.getX()+","+ball.getY()+","+
     		bats[0].getX()+","+bats[0].getY()+","+
     		bats[1].getX()+","+bats[1].getY() +',';
-    
-    String p0Send = multiCastSend+model.getP0Time();
-    
-    String p1Send = multiCastSend+model.getP1Time();
-    
-    left.put( p0Send );
-    
-    right.put( p1Send );
-    
+    try
+    {
+		mutlicastOut.put(multiCastSend);
+		//System.out.println(multiCastSend);
+	}
+    catch (IOException e)
+    {
+		e.printStackTrace();
+	}
   }
 
   

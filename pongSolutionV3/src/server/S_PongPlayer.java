@@ -76,11 +76,6 @@ class S_PongPlayer extends Thread
 		{
 			String move = (String)pReader.get();//Gets the data from the reader
 
-			if(true)//DUMMY CODE - figure out how to determine if sender has closed
-			{
-				//  server.removeFromGameList(gameNumber);
-			}
-
 			//If data was read, determine if player wants to move up or down		  
 			if(move != null && !move.equals(""))
 			{

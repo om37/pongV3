@@ -3,6 +3,7 @@ import java.io.IOException;
 import java.net.*;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 
 import static common.Global.*;
 import common.*;
@@ -15,8 +16,10 @@ import common.*;
 public class Server
 {
   private NetObjectWriter p0, p1;
-  ServerSocket ss;
-  private  ArrayList<Integer> gameList;
+  private ServerSocket ss;
+  //private  ArrayList<Integer> gameList;
+  private  ArrayList<S_ActiveModel> activeGameList;
+  private int numOfGames;
   
   public static void main( String args[] )
   {
@@ -30,11 +33,12 @@ public class Server
   {
     DEBUG.set( true );
     DEBUG.trace("Pong Server");
-    //DEBUG.set( false );               // Otherwise lots of debug info
+    DEBUG.set( false );               // Otherwise lots of debug info
     
-    gameList = new ArrayList<Integer>();   
+    numOfGames = 0;
+    activeGameList = new ArrayList<>();
+    
     Runnable r = setupRunnable();
-   
     Thread sendGameLists = new Thread(r);
     sendGameLists.start();
     
@@ -51,18 +55,18 @@ public class Server
     while(true)
     {
     	System.out.println("Starting loop. Game num: " + numOfGames);
-    	S_PongModel model = new S_PongModel();
+    	S_PongModel model = new S_PongModel(this, numOfGames);
+    	
 	    makeContactWithClients( model );
 	    
 	    S_PongView  view  = new S_PongView(p0, p1, numOfGames, this );
+	    S_PongMulticastView mView = new S_PongMulticastView(numOfGames, this);
 	
 	    model.addObserver( view );       // Add observer to the model
+	    model.addObserver(mView);		 // Add multicast observer to the model
 	    
 	    model.makeActiveObject();        // Start play
-	    gameList.add(numOfGames);
-	    System.out.println("added to game list. new size: "+gameList.size());
 		numOfGames++;
-		System.out.println("Ending loop. Game num now set to: " + numOfGames);
     }
   }
   
@@ -91,16 +95,32 @@ public class Server
 	};
   }
   
+  public void addActiveGameToList(S_ActiveModel activeGame)
+  {
+	  activeGameList.add(activeGame);
+  }
+  
   /**
    * Removes a game from the server's game list.
    * @param gameNum the game to be removed
    */
   public void removeFromGameList(int gameNum)
   {
-	  System.out.println("Removing " + gameNum);
-	  gameList.remove((Object)gameNum);
+	  int indexToRemove = -1;
+	  
+	  for(S_ActiveModel activeGame : activeGameList)
+	  {
+		  if(activeGame.getGameNum()==gameNum)
+		  {
+			  activeGame.isRunning = false;
+			  indexToRemove = activeGameList.indexOf(activeGame);
+			  break;
+		  }
+	  }
+	  if(indexToRemove > -1)
+		  activeGameList.remove(indexToRemove);
   }
-  
+   	
   /**
    * Returns a string representation of the game list. Separated with "-" symbols for splitting on observer screen
    * @return String the game list
@@ -108,13 +128,13 @@ public class Server
   public String getGameListAsString()
   {
 	  String games = "";
-	  if(gameList.size() > 0)
+	  if(activeGameList.size() > 0)
 	  {
-		  for(int i=0;i<gameList.size();i++)
+		  for(int i=0;i<activeGameList.size();i++)
 		  {
-			  games += gameList.get(i)+"-";
+			  games += activeGameList.get(i).getGameNum()+"-";
 		  }
-		  System.out.println("Game string: " + games);
+		  //System.out.println("Game string: " + games);
 		  return games;
 	  }
 	  else

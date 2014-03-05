@@ -16,7 +16,7 @@ public class Global
   
   public static final double BAT_MOVE=5;       // Each move is
   
-  public static int numOfGames = 0; //Number of games being played
+//  public static int numOfGames = 0; //Number of games being played
   
   // Of course this should not be a constant
   //  but should be user settable

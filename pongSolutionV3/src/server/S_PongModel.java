@@ -18,11 +18,11 @@ public class S_PongModel extends Observable
   
   private Thread activeModel;
 
-  public S_PongModel()
+  public S_PongModel(Server server, int gameNum)
   {
     bats[0] = new GameObject(  60, H/2, BAT_WIDTH, BAT_HEIGHT);
     bats[1] = new GameObject(W-60, H/2, BAT_WIDTH, BAT_HEIGHT);
-    activeModel = new Thread( new S_ActiveModel( this ) );
+    activeModel = new Thread( new S_ActiveModel( this, server, gameNum ) );
   }
   
   /**

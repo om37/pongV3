@@ -24,13 +24,10 @@ public class Global
   public static final String IP	  = "193.62.172.232";//Machine's current IP (change each time)
   public static final String HOST = "localhost"; // M/C Name/IP
   
-  public static enum DIRECTIONS {UP, DOWN};
   
   //Multicast Vars
- 
   //Ports
  public static final int P_SERVER_WRITE  = 55000;  // Sever Writes on
- public static final int P_SERVER_READ  = 55001;  // Server Reads on
  public static final int P_GAME_LIST    = 55002;  //Server sends game list on
  
  // MultiCast Address

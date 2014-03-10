@@ -29,7 +29,8 @@ class C_PongClient
 	}
 
 	/**
-	 * Start the Client
+	 * Start the Client - creates the game's model, view and controller. Creates a socket to the server
+	 * via makeContactWithServer, finally shows the view to the client.
 	 */
 	public void start()
 	{
@@ -37,7 +38,7 @@ class C_PongClient
 		DEBUG.trace( "Pong Client" );
 		DEBUG.set( false );
 		C_PongModel       model = new C_PongModel();
-		C_PongView        view  = new C_PongView(true);
+		C_PongView        view  = new C_PongView(true, multicast);
 		C_PongController  cont  = new C_PongController( model, view );
 
 		makeContactWithServer( model, cont );
@@ -48,10 +49,11 @@ class C_PongClient
 	}
 
 	/**
-	 * Make contact with the Server who controls the game
-	 * Players will need to know about the model
+	 * Make contact with the Server who controls the game. Uses the socket this creates to create a player.
+	 * The type of player depends on whether or not the user has opted to view the game with Multicast.
+	 * Players will need to be given a model object
 	 * 
-	 * @param model Of the game
+	 * @param model the game's model
 	 * @param cont Controller (MVC) of the Game
 	 */
 	public void makeContactWithServer( C_PongModel model, C_PongController  cont )
@@ -62,18 +64,14 @@ class C_PongClient
 		{
 			DEBUG.trace("Contacting server....");
 
-			Socket conn = new Socket(serverAddress, Global.PORT);
+			Socket conn = new Socket(serverAddress, Global.PORT);//Use entered IP address, server uses global port
 			C_PongPlayer me;
-			if(!multicast)
-			{
-				me = new C_PongPlayer(model, conn, multicast);
-			}
+			
+			if (!multicast)
+				me = new C_PongPlayer(model, conn);//Normal player if not using multicast
 			else
-			{
-				me = new C_PongMulticastPlayer(model, conn);
-			}
-			model.addPlayer(me);
-
+				me = new C_PongMulticastPlayer(model, conn);//... Else multicast player
+			
 			DEBUG.trace("Starting client player thread...");
 			me.start();
 		}

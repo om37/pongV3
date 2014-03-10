@@ -1,3 +1,5 @@
+/Makefile
 /client
 /common
+/glob.sh
 /server

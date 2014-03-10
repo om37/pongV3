@@ -29,7 +29,7 @@ class C_PongObserver extends C_PongPlayer
 
 		gameToWatch = selectedGame;
 		model = new C_PongModel();
-		view  = new C_PongView(false);
+		view  = new C_PongView(false, true);
 
 		cont  = new C_PongController( model, view );
 		model.addObserver( view );       // Add observer to the model
@@ -39,7 +39,7 @@ class C_PongObserver extends C_PongPlayer
 
 		try 
 		{
-			in = new NetMCReader(P_SERVER_WRITE, Global.MCA);
+			in = new NetMCReader(P_COORD_WRITE, Global.GAME_MCA);
 		} 
 		catch (IOException e) 
 		{

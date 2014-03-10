@@ -30,7 +30,7 @@ class S_ActiveModel implements Runnable
 	 */
 	public int getGameNum()
 	{
-		System.out.println(gameNum);
+		//System.out.println(gameNum);
 		return gameNum;
 	}
 
@@ -42,7 +42,7 @@ class S_ActiveModel implements Runnable
 	{
 		isRunning = true;
 		server.addActiveGameToList(this);
-		
+
 		final double S = 1;           // Units to move
 		try
 		{
@@ -53,7 +53,7 @@ class S_ActiveModel implements Runnable
 			{
 				if(Thread.currentThread().isInterrupted() || !isRunning)
 					return;
-				
+
 				DEBUG.trace("Active model loop started");
 				double x = ball.getX(); double y = ball.getY();
 				// Deal with possible edge of board hit
@@ -74,9 +74,9 @@ class S_ActiveModel implements Runnable
 				{
 					ball.changeDirectionX();
 				}
-
-//				System.out.println(count);
-//				count++;
+				
+				System.out.println(count);
+				count++;
 
 				pongModel.modelChanged();      // Model changed refresh screen
 

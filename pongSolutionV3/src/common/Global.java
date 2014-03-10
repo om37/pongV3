@@ -21,17 +21,19 @@ public class Global
   // Of course this should not be a constant
   //  but should be user settable
   public static final int    PORT = 50001;       // Port
-  public static final String IP	  = "193.62.172.232";//Machine's current IP (change each time)
   public static final String HOST = "localhost"; // M/C Name/IP
   
   
+  public static final NetMCWriter MULTICAST_OUT = new NetMCWriter(Global.P_COORD_WRITE, Global.GAME_MCA);
+  public static final NetMCWriter GAME_LIST_OUT = new NetMCWriter(Global.P_GAME_LIST, Global.LIST_MCA);
+  
   //Multicast Vars
   //Ports
- public static final int P_SERVER_WRITE  = 55000;  // Sever Writes on
+ public static final int P_COORD_WRITE  = 55000;  // Sever Writes on
  public static final int P_GAME_LIST    = 55002;  //Server sends game list on
  
  // MultiCast Address
- public static final String MCA = "224.0.0.7";
+ public static final String GAME_MCA = "224.0.0.7";
  public static final String LIST_MCA = "224.0.0.8";
   
 }

@@ -16,6 +16,7 @@ public class C_PongModel extends Observable
 	private C_PongPlayer player;
 	private long sendTime = 0;
 	private long recTime = 0;
+	private long pingTime;
 	private boolean sendChanged = false;
 
 	public C_PongModel()
@@ -23,6 +24,25 @@ public class C_PongModel extends Observable
 		bats[0] = new GameObject(  60, H/2, BAT_WIDTH, BAT_HEIGHT);
 		bats[1] = new GameObject(W-60, H/2, BAT_WIDTH, BAT_HEIGHT);
 		ball = new GameObject( W/2, H/2, BALL_SIZE, BALL_SIZE );
+		pingTime = 0;
+	}
+	
+	/**
+	 * Sets the ping
+	 * @param time The time to set
+	 */
+	public void setPingTime(long time)
+	{
+		pingTime=time;
+	}
+	
+	/**
+	 * Returns the ping
+	 * @return pingTime the ping
+	 */
+	public long getPingTime()
+	{
+		return pingTime;
 	}
 
 	/**

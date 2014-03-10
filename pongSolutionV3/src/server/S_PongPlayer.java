@@ -49,7 +49,6 @@ class S_PongPlayer extends Thread
 			DEBUG.trace("Player Exception");
 			e.printStackTrace();
 		}
-
 	}
 
 	/**
@@ -62,56 +61,62 @@ class S_PongPlayer extends Thread
 		return pWriter;
 	}
 
-
 	/**
 	 * Get and update the model with the latest bat movement
 	 */
 	public void run()                             // Execution
 	{
-		long sendTime;
-
+		boolean running = true;//A flag
+		
 		//Endless loop, read from client, listen for keyPress message from client's controller
 		//Send message to model, calc new position(inside model)
-		while(true)
+		while(running)
 		{
+			if(!running)
+				return;
+			
 			String move = (String)pReader.get();//Gets the data from the reader
 
 			//If data was read, determine if player wants to move up or down		  
 			if(move != null && !move.equals(""))
 			{
-				String[] splitMove = move.split(",");//Checks to see if time attached
-				if(splitMove[0].equals("UP"))
+				String[] splitMove = move.split(",");
+				switch(splitMove[0])
 				{
-					GameObject pBat = pModel.getBat(pNumber);//Create dummy bat (get player's bat from model)
-					pBat.moveY(-BAT_MOVE);//Move the bat
-					pModel.setBat(pNumber, pBat);//Set the bat again (with new coords)
-					pModel.modelChanged();//Update observers
-
-					sendTime = Long.parseLong(splitMove[1]);
-					if(pNumber == 0)
-						pModel.setP0Time(sendTime);
-					else
-						pModel.setP1Time(sendTime);
-				}			  
-				else if(splitMove[0].equals("DOWN"))
-				{
-					GameObject pBat = pModel.getBat(pNumber);
-					pBat.moveY(BAT_MOVE);
-					pModel.setBat(pNumber, pBat);
-					pModel.modelChanged();//Call model changed before setting the time otherwise we're out of step
-
-					sendTime = Long.parseLong(splitMove[1]);
-					if(pNumber == 0)
-						pModel.setP0Time(sendTime);
-					else
-						pModel.setP1Time(sendTime);
-				}
-				else if(splitMove[0].equals("CLOSED"))
-				{
-					server.removeFromGameList(gameNumber);
-					return;
+					case "UP" :
+						moveBat(-BAT_MOVE);
+						setTime(splitMove[1]);
+						break;
+					case "DOWN" :
+						moveBat(BAT_MOVE);
+						setTime(splitMove[1]);
+						break;
+					case "CLOSED" :
+						server.removeFromGameList(gameNumber);
+						running = false;
+						break;
+					default :
+						setTime(splitMove[1]);
+						break;
 				}
 			}
 		}
+		if(!running)
+			return;
+	}
+
+	private void moveBat(double toMove)
+	{
+		GameObject pBat = pModel.getBat(pNumber);//Create dummy bat (get player's bat from model)
+		pBat.moveY(toMove);//Move the bat
+		pModel.setBat(pNumber, pBat);//Set the bat again (with new coords)
+	}
+
+	private void setTime(String time)
+	{
+		if(pNumber == 0)
+			pModel.setP0Time(Long.parseLong(time));
+		else
+			pModel.setP1Time(Long.parseLong(time));
 	}
 }

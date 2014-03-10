@@ -15,6 +15,7 @@ public class S_PongModel extends Observable
   private GameObject bats[] = new GameObject[2];
   private long 		 p0TimeReceived = 0;
   private long 		 p1TimeReceived = 0;
+  private long		 timeMessageSent;
   
   private Thread activeModel;
 
@@ -23,6 +24,16 @@ public class S_PongModel extends Observable
     bats[0] = new GameObject(  60, H/2, BAT_WIDTH, BAT_HEIGHT);
     bats[1] = new GameObject(W-60, H/2, BAT_WIDTH, BAT_HEIGHT);
     activeModel = new Thread( new S_ActiveModel( this, server, gameNum ) );
+  }
+  
+  public void setTimeMessageSent(long time)
+  {
+	  timeMessageSent = time;
+  }
+  
+  public long getTimeMessageSent()
+  {
+	  return timeMessageSent;
   }
   
   /**

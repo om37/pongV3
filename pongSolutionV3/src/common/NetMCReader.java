@@ -17,7 +17,7 @@ public class NetMCReader
   public NetMCReader(int aPort, String mca ) throws IOException
   {
     port   = aPort;
-    DEBUG.trace("MCRead: C port [%s] MCA [%s]", port, mca );
+    System.out.printf("MCRead: C port [%s] MCA [%s] \n", port, mca );
     socket = new MulticastSocket( port );
     group  = InetAddress.getByName( mca );
     socket.joinGroup(group);
@@ -33,9 +33,18 @@ public class NetMCReader
   public synchronized String get() throws IOException
   {
     DEBUG.trace("MCRead: on port [%d]", port );
-    byte[] buf = new byte[512];
+    byte[] buf = new byte[10240];
+    DEBUG.trace("1");
     DatagramPacket packet = new DatagramPacket(buf, buf.length);
+    DEBUG.trace("2" );
+    try{
     socket.receive(packet);
+    }
+    catch(Exception e)
+    {
+    	System.out.println(e.getMessage());
+    }
+    DEBUG.trace("3");
 
     String m = new String( packet.getData(), 0, packet.getLength() );
     DEBUG.trace("MCRead: Read <%s>", m );

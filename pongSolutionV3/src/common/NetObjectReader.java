@@ -11,7 +11,7 @@ public class NetObjectReader extends ObjectInputStream
   public NetObjectReader( Socket s ) throws IOException
   {
       super( s.getInputStream() );
-      DEBUG.trace("NetObjectReader constructor");
+      System.out.println("NetObjectReader constructor");
   }
 
   // Get object return null on 'error'

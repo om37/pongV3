@@ -21,7 +21,6 @@ class C_PongPlayer extends Thread
 {
 	private NetObjectReader reader;
 	private NetObjectWriter writer;
-	//private NetMCReader		mcReader;
 	private String 			moveDir;
 	private C_PongModel model;
 
@@ -41,6 +40,8 @@ class C_PongPlayer extends Thread
 	{
 		model=aModel;
 		model.addPlayer(this);
+		
+		moveDir="noMove";
 		try 
 		{
 			reader = new NetObjectReader(s);
@@ -62,10 +63,13 @@ class C_PongPlayer extends Thread
 	{
 		DEBUG.trace("Started player thread....");
 		while(true)
-		{		
+		{					
 			String data="";
 			data = reader.get().toString();
 			updateViewWithNewValues(data);
+			
+			if(moveDir.equals("CLOSED"))
+				return;
 		}
 	}
 
@@ -88,7 +92,8 @@ class C_PongPlayer extends Thread
 	 * 5	: Bat 1's x
 	 * 6	: Bat 1's y
 	 * 
-	 * 7	: Time of last message RECEIVED on server
+	 * 7	: PING
+	 * 8	: Unique message out from server (unix time)
 	 * 
 	 * @param inData - the string of received from the server
 	 */
@@ -110,8 +115,7 @@ class C_PongPlayer extends Thread
 			double batTwoY=Double.parseDouble(newCoords[6]);
 
 			long time=Long.parseLong(newCoords[7]);
-			
-			model.setPingTime(time);
+			long serverMessage = Long.parseLong(newCoords[8]);//Don't need to use this, just send it back to server
 
 			//Create dummy ball object with new coords 
 			GameObject newBall   = model.getBall();
@@ -129,11 +133,15 @@ class C_PongPlayer extends Thread
 			//Save updates back to model
 			model.setBall(newBall);
 			model.setBats(newBats);
-
+			
+			//Set time
+			model.setPingTime(time);
+			
 			//Call to update observers
 			model.modelChanged();
 			
-			writer.put(moveDir+","+new Date().getTime());
+			
+			writer.put(moveDir+","+serverMessage);//Send back the timestamp
 			moveDir="NoMove";
 		}
 	}
@@ -145,6 +153,8 @@ class C_PongPlayer extends Thread
 	public void moveBat(String details)
 	{
 		moveDir = details;
+		if(details.equals("CLOSED"))
+			writer.put("CLOSED,123");
 	}
 
 }

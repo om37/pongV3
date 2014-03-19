@@ -14,7 +14,7 @@ public class NetMCWriter
   public NetMCWriter(int aPort, String mca) 
   {
     port = aPort;
-    DEBUG.trace( "NetMCWrite: port [%5d] MCA [%s]", port, mca );
+    System.out.printf( "NetMCWrite: port [%5d] MCA [%s] \n", port, mca );
     try
     {
     socket = new MulticastSocket( port );

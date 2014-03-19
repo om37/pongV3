@@ -17,7 +17,7 @@ class NetDGReader
   public NetDGReader(int aPort) throws IOException
   {
     port   = aPort;
-    DEBUG.trace("NetDGReader port [%5d]", port );
+    System.out.printf("NetDGReader port [%5d] \n", port );
     socket = new DatagramSocket(port);
   }
 

@@ -16,7 +16,7 @@ class NetDGWriter
   {
     port = aPort;
     host = aHost;
-    DEBUG.trace( "NetDGWriter: Port [%5d] Host [%s]", port, host );
+    System.out.printf( "NetDGWriter: Port [%5d] Host [%s]\n", port, host );
 
     socket  = new DatagramSocket();
     address = InetAddress.getByName(host);

@@ -67,7 +67,7 @@ class C_PongView extends JFrame implements Observer
 		ball  = model.getBall();
 		bats  = model.getBats();
 
-		if(count % 10 == 0)//Don't update every time. It becomes an unreadable flicker.
+		if(count % 5 == 0)//Don't update every time. It becomes an unreadable flicker.
 			ping = model.getPingTime();
 
 		DEBUG.trace( "C_PongView.update" );

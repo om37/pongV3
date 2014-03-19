@@ -17,7 +17,6 @@ public class Server
 {
 	private NetObjectWriter p0, p1;
 	private ServerSocket ss;
-	//private  ArrayList<Integer> gameList;
 	private  ArrayList<S_ActiveModel> activeGameList;
 	private int numOfGames;
 

@@ -13,7 +13,7 @@ public class NetObjectWriter extends ObjectOutputStream
   public NetObjectWriter( Socket s ) throws IOException
   {
       super( s.getOutputStream() );
-      DEBUG.trace("NetObjectWriter constructor");
+      System.out.println("NetObjectWriter constructor");
       s.setTcpNoDelay(true);
   }
 

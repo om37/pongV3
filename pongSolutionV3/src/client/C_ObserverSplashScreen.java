@@ -67,11 +67,11 @@ public class C_ObserverSplashScreen extends JFrame
 		try 
 		{
 			in = new NetMCReader(Global.P_GAME_LIST, Global.LIST_MCA);
-			while(games == null ? games==null : games.isEmpty())//While games is null or empty
-			{
+			//while(games == null ? games==null : games.isEmpty())//While games is null or empty
+			//{
 				games = in.get().split(",")[0];//
 				System.out.println(in.get());
-			}
+			//}
 		} 
 		catch (IOException e) 
 		{

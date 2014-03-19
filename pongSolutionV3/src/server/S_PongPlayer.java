@@ -4,6 +4,7 @@ import static common.Global.BAT_MOVE;
 
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Date;
 
 import common.DEBUG;
 import common.GameObject;
@@ -67,37 +68,50 @@ class S_PongPlayer extends Thread
 	public void run()                             // Execution
 	{
 		boolean running = true;//A flag
-		
+
 		//Endless loop, read from client, listen for keyPress message from client's controller
 		//Send message to model, calc new position(inside model)
 		while(running)
 		{
 			if(!running)
 				return;
-			
+
 			String move = (String)pReader.get();//Gets the data from the reader
 
 			//If data was read, determine if player wants to move up or down		  
 			if(move != null && !move.equals(""))
 			{
-				String[] splitMove = move.split(",");
+				String[] splitMove = move.split(",");				
+				long fromClient = Long.parseLong(splitMove[1]);//The sent with client message
+				long onServer 	= pModel.getTimeMessageSent();//The one saved in view
+
+				//System.out.println(fromClient == onServer);
+				//System.out.println("C:"+fromClient);
+				//System.out.println("S:"+onServer);
+
 				switch(splitMove[0])
 				{
-					case "UP" :
-						moveBat(-BAT_MOVE);
-						setTime(splitMove[1]);
-						break;
-					case "DOWN" :
-						moveBat(BAT_MOVE);
-						setTime(splitMove[1]);
-						break;
-					case "CLOSED" :
-						server.removeFromGameList(gameNumber);
-						running = false;
-						break;
-					default :
-						setTime(splitMove[1]);
-						break;
+				case "UP" :
+					moveBat(-BAT_MOVE);		
+					if(fromClient == onServer)//If the timestamps match
+						pModel.setPlayerTime(pNumber);//Save time and set client's ping (done in model method)		
+					break;
+
+				case "DOWN" :
+					moveBat(BAT_MOVE);
+					if(fromClient == onServer)
+						pModel.setPlayerTime(pNumber);
+					break;
+
+				case "CLOSED" :
+					server.removeFromGameList(gameNumber);
+					running = false;
+					break;
+
+				default :
+					if(fromClient == onServer)
+						pModel.setPlayerTime(pNumber);
+					break;
 				}
 			}
 		}
@@ -110,13 +124,5 @@ class S_PongPlayer extends Thread
 		GameObject pBat = pModel.getBat(pNumber);//Create dummy bat (get player's bat from model)
 		pBat.moveY(toMove);//Move the bat
 		pModel.setBat(pNumber, pBat);//Set the bat again (with new coords)
-	}
-
-	private void setTime(String time)
-	{
-		if(pNumber == 0)
-			pModel.setP0Time(Long.parseLong(time));
-		else
-			pModel.setP1Time(Long.parseLong(time));
 	}
 }

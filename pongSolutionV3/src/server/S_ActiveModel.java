@@ -75,7 +75,7 @@ class S_ActiveModel implements Runnable
 					ball.changeDirectionX();
 				}
 				
-				System.out.println(count);
+				//System.out.println(count);
 				count++;
 
 				pongModel.modelChanged();      // Model changed refresh screen

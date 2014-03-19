@@ -90,11 +90,13 @@ class C_PongMulticastPlayer extends C_PongPlayer
 			try
 			{
 				data = (String) mcReader.get();
+				DEBUG.set(true);
 				DEBUG.trace( "Client PLayer read %s", data);
 			}
 			catch (IOException e)
 			{
 				DEBUG.error("MC In.gett error: %s", e.getMessage());
+				System.out.println("FAILED ON GET");
 				e.printStackTrace();
 			}
 

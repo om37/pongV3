@@ -14,13 +14,15 @@ public class S_PongModel extends Observable
 {
 	private GameObject ball   = new GameObject( W/2, H/2, BALL_SIZE, BALL_SIZE );
 	private GameObject bats[] = new GameObject[2];
-	
+
 	private long		 timeMessageSent;//Message sent out from server
-	
+
 	private long 		 p0CurrMessageTime = 0;//Message back from p0
 	private long 		 p1CurrMessageTime = 0;//Message back from p1
-	
+
 	private long[]		 pings 			   = new long[2];
+	
+	private Ping[]		playersPing		   = new Ping[2];
 
 	private Thread activeModel;
 
@@ -29,8 +31,21 @@ public class S_PongModel extends Observable
 		bats[0] = new GameObject(  60, H/2, BAT_WIDTH, BAT_HEIGHT);
 		bats[1] = new GameObject(W-60, H/2, BAT_WIDTH, BAT_HEIGHT);
 		activeModel = new Thread( new S_ActiveModel( this, server, gameNum ) );
+		
+		playersPing[0] = new Ping(0);
+		playersPing[1] = new Ping(1);
 	}
 	
+	public Ping[] getPings()
+	{
+		return playersPing;
+	}
+	
+	public Ping getPing(int player)
+	{
+		return playersPing[player];
+	}
+
 	public void setPlayerTime(int player)//Called from S_Player when the timestamp of a client's message matches the one we have saved
 	{
 		if(player == 0)
@@ -43,8 +58,8 @@ public class S_PongModel extends Observable
 			System.out.println(timeMessageSent);
 			System.out.println(pings[0]);
 			System.out.println("**********************");
-			*/
-			
+			 */
+
 			/*
 			 * NOTES! 
 			 * Currently, local games always seem to have 0 ping. Perhaps because it's a local game
@@ -60,14 +75,15 @@ public class S_PongModel extends Observable
 			pings[1] = p1CurrMessageTime - timeMessageSent;
 		}
 	}
-	
-	public long getPing(int player)
+
+	/*public long getPing(int player)
 	{
 		return pings[player];
-	}
+	}*/
 
 	public void setTimeMessageSent(long time)
 	{
+
 		timeMessageSent = time;
 	}
 
@@ -155,6 +171,49 @@ public class S_PongModel extends Observable
 	{
 		DEBUG.trace( "S_PongModel.modelChanged");
 		setChanged(); notifyObservers();
+	}
+
+	public class Ping{
+		int playerNumber;
+		long messageSentFromServer;
+		long messageReceivedBack;
+		boolean receivedYet;
+
+		public Ping(int pNum)
+		{
+			playerNumber = pNum;
+			
+			messageSentFromServer = 0;
+			messageReceivedBack = 0;
+			
+			receivedYet = true;
+		}
+
+		public void setTimeSent(long time)
+		{
+			if(receivedYet)
+			{
+				messageSentFromServer = time;
+				receivedYet = false;
+			}
+		}
+		
+		public long getTimeSent()
+		{
+			return messageSentFromServer;
+		}
+
+		public void setTimeRec(long time)
+		{
+			messageReceivedBack = time;
+			receivedYet = true;
+		}
+
+		public long getPing()
+		{
+			return messageReceivedBack - messageSentFromServer;
+		}
+
 	}
 
 }

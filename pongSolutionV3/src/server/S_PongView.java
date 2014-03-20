@@ -8,6 +8,8 @@ import java.util.IllegalFormatException;
 import java.util.Observable;
 import java.util.Observer;
 
+import server.S_PongModel.Ping;
+
 /**
  * Displays a graphical view of the game of pong
  */
@@ -55,14 +57,17 @@ class S_PongView implements Observer
 				bats[0].getX()+","+bats[0].getY()+","+
 				bats[1].getX()+","+bats[1].getY() +',';
 
-		//if(count % 10 == 0)
-		//{
+		if(count % 10 == 0)
+		{
 			mills = new Date().getTime();//Get time the server sends a message
-			model.setTimeMessageSent(mills);//Save it in model
-		//}
+			Ping[] pings = model.getPings();
+			
+			pings[0].setTimeSent(mills);
+			pings[1].setTimeSent(mills);
+		}
 		
-		String p0Send = multiCastSend + model.getPing(0) + "," + mills;//Add the ping to the message
-		String p1Send = multiCastSend + model.getPing(1) + "," + mills;//And send mills to client
+		String p0Send = multiCastSend + model.getPing(0).getPing() + "," + mills;//Add the ping to the message
+		String p1Send = multiCastSend + model.getPing(1).getPing() + "," + mills;//And send mills to client
 		
 		
 		/*

@@ -6,6 +6,8 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Date;
 
+import server.S_PongModel.Ping;
+
 import common.DEBUG;
 import common.GameObject;
 import common.NetObjectReader;
@@ -82,8 +84,10 @@ class S_PongPlayer extends Thread
 			if(move != null && !move.equals(""))
 			{
 				String[] splitMove = move.split(",");				
-				long fromClient = Long.parseLong(splitMove[1]);//The sent with client message
-				long onServer 	= pModel.getTimeMessageSent();//The one saved in view
+				long messageFromClient = Long.parseLong(splitMove[1]);//The sent with client message
+				//long onServer 	= pModel.getTimeMessageSent();//The one saved in view
+				Ping[] pings = pModel.getPings();
+				long[] messagesSent = new long[] { pings[0].getTimeSent() , pings[1].getTimeSent() };  
 
 				//System.out.println(fromClient == onServer);
 				//System.out.println("C:"+fromClient);
@@ -93,14 +97,17 @@ class S_PongPlayer extends Thread
 				{
 				case "UP" :
 					moveBat(-BAT_MOVE);		
-					if(fromClient == onServer)//If the timestamps match
-						pModel.setPlayerTime(pNumber);//Save time and set client's ping (done in model method)		
+					if(messageFromClient == messagesSent[pNumber])//If the timestamps match
+						pModel.getPing(pNumber).setTimeRec(new Date().getTime());
+						//setPlayerTime(pNumber);//Save time and set client's ping (done in model method)		
 					break;
 
 				case "DOWN" :
 					moveBat(BAT_MOVE);
-					if(fromClient == onServer)
-						pModel.setPlayerTime(pNumber);
+					//if(messageFromClient == onServer)
+					if(messageFromClient == messagesSent[pNumber])
+						pModel.getPing(pNumber).setTimeRec(new Date().getTime());
+						//pModel.setPlayerTime(pNumber);
 					break;
 
 				case "CLOSED" :
@@ -109,8 +116,10 @@ class S_PongPlayer extends Thread
 					break;
 
 				default :
-					if(fromClient == onServer)
-						pModel.setPlayerTime(pNumber);
+					//if(messageFromClient == onServer)
+					if(messageFromClient == messagesSent[pNumber])
+						pModel.getPing(pNumber).setTimeRec(new Date().getTime());
+						//pModel.setPlayerTime(pNumber);
 					break;
 				}
 			}
